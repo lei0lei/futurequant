@@ -1,0 +1,8 @@
+requests
+pymongo
+pandas
+numpy
+matplotlib
+seaborn
+jupyterlab
+ipykernel
