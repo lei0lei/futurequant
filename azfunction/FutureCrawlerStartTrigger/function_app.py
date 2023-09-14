@@ -20,6 +20,14 @@ DCE_FUTURE_PRICE_COLLECTION_NAME = "DCEFuturePriceDb"
 DCE_FUTURE_CODE_COLLECTION_NAME = 'DCEFutureCodeDb'
 
 
+
+
+DCEmkt = ['V','P','B','M','I','JD','L','PP','FB','BB','Y','C','A','J','JM','CS','EG','RR','EB','PG','LH']
+CZCEmkt=['TA','OI','RS','RM','ZC','WH','JR','SR','RI','CF','MA','FG','LR','SF','SM','CY','AP','CJ','UR','SA','PF','PK']
+CFFEXmkt=['IF','TF','T','IH','IC','TS','IM']
+GFEXmkt=['SI','LC']
+SHFEmkt=['FU','SC','AL','RU','ZN','CU','AU','RB','WR','PB','AG','BU','HC','SN','NI','SP','NR','SS','LU','BC','AO','BR','EC']
+
 @dataclass
 class Future:
     future_code:str
@@ -67,8 +75,22 @@ def FutureCrawlerStartTrigger(myTimer: func.TimerRequest) -> None:
     for i in ft:
         to_insert_item = {}
         to_insert_item['categoryID'] = None
-        to_insert_item['market'] = 'DCE'
+        
         to_insert_item['future_code'] = i.split('=')[0]
+        future_code_list =[p for p in  to_insert_item['future_code'] if p>='A' and p<='Z']
+        future_code_str = ''.join(future_code_list)
+        if future_code_str in DCEmkt:
+            to_insert_item['market'] = 'DCE'
+        elif future_code_str in CZCEmkt:
+            to_insert_item['market'] = 'CZCE'
+        elif future_code_str in CFFEXmkt:
+            to_insert_item['market'] = 'CFFEX'
+        elif future_code_str in GFEXmkt:
+            to_insert_item['market'] = 'GFEX'
+        elif future_code_str in SHFEmkt:
+            to_insert_item['market'] = 'SHFE'
+        else:
+            to_insert_item['market'] = None
         # print(to_insert_item['future_code'])
         _items = i.split('"')[1]
         # print(_items)

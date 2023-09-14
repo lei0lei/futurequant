@@ -6,3 +6,5 @@ matplotlib
 seaborn
 jupyterlab
 ipykernel
+plotly
+beautifulsoup4
