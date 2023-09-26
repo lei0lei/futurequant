@@ -445,7 +445,7 @@ def main():
 	today_string = today_date.strftime('%Y-%m-%d')  # 格式为 YYYY-MM-DD
 	# print(today_string)
 	today_string = "2023-09-21" # To check 9-19
-	get_name_list(end_date_string = today_string, period = 20, threshold = 0.05)
-
+	results = get_name_list(end_date_string = today_string, period = 20, threshold = 0.05)
+	return results
 if __name__ == "__main__":
 	main()
