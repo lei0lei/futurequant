@@ -91,6 +91,8 @@ dce_future_info = {
 '国际铜':'BC',
 '氧化铝':'AO',
 '集运指数欧线期货':'EC',
+'PX':'PX',
+'烧碱':'SH'
 }
 
 market_list = ['上海期货交易所','大连商品交易所','郑州商品交易所','广州期货交易所']
@@ -104,7 +106,7 @@ def Future100ppi(myTimer: func.TimerRequest) -> None:
     utc_timestamp = datetime.datetime.utcnow().replace(
         tzinfo=datetime.timezone.utc).isoformat()
     
-
+# def run():
     client = pymongo.MongoClient(COSMOS_CONNECTION_STRING)
     DCEdb = client[DCE_DB_NAME]
     if DCE_DB_NAME not in client.list_database_names():
@@ -117,7 +119,9 @@ def Future100ppi(myTimer: func.TimerRequest) -> None:
 
         DCE_commodity_price_collection = DCEdb[DCE_COMMODITY_PRICE_COLLECTION_NAME]
 
-    date =  datetime.date.today()-datetime.timedelta(days=1)
+    one_date = datetime.date(2023,9,22)
+    # date =  datetime.date.today()-datetime.timedelta(days=1)
+    date =  one_date-datetime.timedelta(days=1)
     sf_base_url = f'https://www.100ppi.com/sf/day-'
     sf2_base_url = 'https://www.100ppi.com/sf2/day-'
     # print(sf_base_url+str(date)+'.html')
@@ -128,8 +132,10 @@ def Future100ppi(myTimer: func.TimerRequest) -> None:
     sf2_soup = BeautifulSoup(sf2_response.text.encode('utf8'), 'html.parser')
 
     table = sf_soup.select('table#fdata')
+
     # print(table[0].prettify())
     a = pd.read_html(str(table))
+    # print(a[0])
     # logging.info(a[0])
     # logging.info(type(a[0]))
     # DCE_future_price_collection.insert_many(to_insert_items)
@@ -140,11 +146,13 @@ def Future100ppi(myTimer: func.TimerRequest) -> None:
             market = str(row[0])
         elif market == '':
             continue
+        elif str(row[0]) not in dce_future_info:
+            continue
         else:
-            print(f'-----------')
-            print(row[0])
-            print(row[1])
-            print(f'-----------')
+            # print(f'-----------')
+            # print(row[0])
+            # print(row[1])
+            # print(f'-----------')
             many_commodity_price.append({
                 'market':market,
                 'update_time':datetime.datetime.now(tz=datetime.timezone.utc),
@@ -166,3 +174,6 @@ def Future100ppi(myTimer: func.TimerRequest) -> None:
     # print(many_commodity_price)
     logging.info(f'write to commoditypricedb')
     DCE_commodity_price_collection.insert_many(many_commodity_price)
+
+# if __name__ == '__main__':
+#     run()
