@@ -44,6 +44,14 @@ def format_messages_to_html(data):
     Ds=''
     for i in D:
         Ds += i
+    if As == '':
+        As = '无'
+    if Bs == '':
+        Bs = '无'
+    if Cs == '':
+        Cs = '无'
+    if Ds == '':
+        Ds = '无'
     messages = """\
     
         <html>
@@ -73,7 +81,7 @@ def format_messages_to_html(data):
                 <td>{Cs}</td>
             </tr>
             <tr>
-                <td>综合结果</td>
+                <td><b><p style="color:red;">综合结果</p></b></td>
                 <td>{Ds}</td>
             </tr>
             </table>
