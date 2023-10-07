@@ -21,9 +21,10 @@ def send_email(messages, sender, sender_auth, recipient):
     smtp.login(sender, sender_auth)
     smtp.sendmail(sender, recipient, message.as_string())
     smtp.close()
+    
 
 def format_messages_to_html(data):
-    print(data)
+    # print(data)
     A = data.iat[0, 1]
     B = data.iat[1, 1]
     C = data.iat[2, 1]

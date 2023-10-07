@@ -72,6 +72,7 @@ def insert_to_DCE_future_code(collection,info):
 def FutureCodeInfo(myTimer: func.TimerRequest,) -> None:
     utc_timestamp = datetime.datetime.utcnow().replace(
         tzinfo=datetime.timezone.utc).isoformat()
+# def run():
     client = pymongo.MongoClient(COSMOS_CONNECTION_STRING)
     DCEdb = client[DCE_DB_NAME]
     if DCE_DB_NAME not in client.list_database_names():
@@ -96,22 +97,24 @@ def FutureCodeInfo(myTimer: func.TimerRequest,) -> None:
         api_part = url.split('#')[-1]
         print(api_part)
         api_path = f'https://money.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQFuturesData?page=1&num=80&sort=symbol&asc=1&node={api_part}&_s_r_a=init'
-
+        print(f'----------')
+        print(api_path)
         commodity = CommoditySpider(api_path,False,api_part,None)
 
         result = requests.get(api_path).json()
+        print(f'----------')
         if len(result)>0:
             commodity.spidered = True
             commodity.future_code =[i['symbol'] for i in result]
         commoditys.append(commodity)
-    
+    print(f'2')
     for k in commoditys:
         if k.spidered is False:
             result = requests.get(k.spider_url).json()
             if len(result)>0:
                 commodity.spidered = True
                 commodity.future_code =[i['symbol'] for i in result]
-
+    print(f'3')
     print(commoditys)
 
     # 插入商品代码 
@@ -142,3 +145,7 @@ def FutureCodeInfo(myTimer: func.TimerRequest,) -> None:
         logging.info('The timer is past due!')
 
     logging.info('Python timer trigger function ran at %s', utc_timestamp)
+
+
+# if __name__ == '__main__':
+#     run()
