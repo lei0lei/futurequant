@@ -119,7 +119,8 @@ def Future100ppi(myTimer: func.TimerRequest) -> None:
 
         DCE_commodity_price_collection = DCEdb[DCE_COMMODITY_PRICE_COLLECTION_NAME]
 
-    one_date = datetime.date(2023,9,22)
+    # one_date = datetime.date(2023,9,22)
+    one_date = datetime.date.today()
     # date =  datetime.date.today()-datetime.timedelta(days=1)
     date =  one_date-datetime.timedelta(days=1)
     sf_base_url = f'https://www.100ppi.com/sf/day-'
@@ -168,12 +169,15 @@ def Future100ppi(myTimer: func.TimerRequest) -> None:
                 'main_future_price':float(row[6]),
                 'main_cf_basis':round(float(row[1])-float(row[6]),2),
                 'main_cf_basis_percent':round((float(row[1])-float(row[6]))/float(row[1]),4),
-                'categoryID':None
+                'categoryID':str(date)
             })
     # 数据库写入
     # print(many_commodity_price)
-    logging.info(f'write to commoditypricedb')
-    DCE_commodity_price_collection.insert_many(many_commodity_price)
-
+    
+    if len(many_commodity_price) > 0:
+        DCE_commodity_price_collection.insert_many(many_commodity_price)
+        logging.info(f'write to commoditypricedb')
+    else:
+        logging.info(f'no data today')
 # if __name__ == '__main__':
 #     run()

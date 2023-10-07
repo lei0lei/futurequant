@@ -84,7 +84,7 @@ def DailyFutureCrawler(myTimer: func.TimerRequest) -> None:
                                         'high':float(row[3]),
                                         'low':float(row[4]),
                                         'deal':int(row[5]),
-                                        'categoryID':None})
+                                        'categoryID':str(datetime.date.today())})
                 else:
                     break
         if len(blanklist)==0:

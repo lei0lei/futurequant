@@ -84,7 +84,7 @@ def FutureCodeInfo(myTimer: func.TimerRequest,) -> None:
         logging.info(f"found db:{DCE_DB_NAME}")
         DCE_commodity_code_collection = DCEdb[DCE_COMMODITY_CODE_COLLECTION_NAME]
         DCE_future_code_collection = DCEdb[DCE_FUTURE_CODE_COLLECTION_NAME]
-    print(f'1')
+    # print(f'1')
     # 获取DCE 商品基础url
     DCE_commodity_query_urls = get_all_future_url(DCE_commodity_code_collection)
 
@@ -92,13 +92,13 @@ def FutureCodeInfo(myTimer: func.TimerRequest,) -> None:
 
     commoditys = []
     results = []
-    print(DCE_commodity_query_urls)
+    # print(DCE_commodity_query_urls)
     for url in DCE_commodity_query_urls:
         api_part = url.split('#')[-1]
-        print(api_part)
+        # print(api_part)
         api_path = f'https://money.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQFuturesData?page=1&num=80&sort=symbol&asc=1&node={api_part}&_s_r_a=init'
-        print(f'----------')
-        print(api_path)
+        # print(f'----------')
+        # print(api_path)
         commodity = CommoditySpider(api_path,False,api_part,None)
 
         result = requests.get(api_path).json()
@@ -107,15 +107,15 @@ def FutureCodeInfo(myTimer: func.TimerRequest,) -> None:
             commodity.spidered = True
             commodity.future_code =[i['symbol'] for i in result]
         commoditys.append(commodity)
-    print(f'2')
+    # print(f'2')
     for k in commoditys:
         if k.spidered is False:
             result = requests.get(k.spider_url).json()
             if len(result)>0:
                 commodity.spidered = True
                 commodity.future_code =[i['symbol'] for i in result]
-    print(f'3')
-    print(commoditys)
+    # print(f'3')
+    # print(commoditys)
 
     # 插入商品代码 
     tt=int(time.time())
@@ -125,9 +125,9 @@ def FutureCodeInfo(myTimer: func.TimerRequest,) -> None:
     to_insert_dce = {'update_time':tt,
                     'market':'DCE',
                     'future_code': future_code,
-                    'categoryID':None}
+                    'categoryID':str(datetime.date.today())}
 
-    print(to_insert_dce)
+    # print(to_insert_dce)
     DCE_future_code_collection.insert_one(to_insert_dce)
 
 

@@ -74,7 +74,6 @@ def FutureCrawlerStartTrigger(myTimer: func.TimerRequest) -> None:
     to_insert_items = []
     for i in ft:
         to_insert_item = {}
-        to_insert_item['categoryID'] = None
         
         to_insert_item['future_code'] = i.split('=')[0]
         future_code_list =[p for p in  to_insert_item['future_code'] if p>='A' and p<='Z']
@@ -103,6 +102,7 @@ def FutureCrawlerStartTrigger(myTimer: func.TimerRequest) -> None:
         print(items[0])
         to_insert_item['clock'] = int(items[1])
         to_insert_item['date'] = items[17]
+        to_insert_item['categoryID'] = items[17]
         to_insert_item['open_price'] = float(items[2])
         to_insert_item['max_price'] = float(items[3])
         to_insert_item['min_price'] = float(items[4])
