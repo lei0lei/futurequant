@@ -345,12 +345,13 @@ def get_name_list(end_date_string, period = 20, period_minute = 20, threshold = 
 		"""
 		t1 = time.time()
 		# get namelist by basis of percentage
+		print(end_date_ahead_string)
 		basis_future = pd.DataFrame([i for i in DCE_commodity_price_collection.find(
 						# {"date": end_date_string}
 						{"date": end_date_ahead_string}
 					).sort("main_future_code", pymongo.ASCENDING) ])
 		# print(basis_future)
-
+		print(basis_future)
 		basis_future = basis_future.sort_values(by='main_cf_basis_percent', ascending=False)
 
 		t2 = time.time()
@@ -372,7 +373,8 @@ def get_name_list(end_date_string, period = 20, period_minute = 20, threshold = 
 		# print(daily_prices.columns) #['_id', 'date', 'future_code', 'close', 'open', 'high', 'low', 'deal', 'categoryID'],
 		
 		t3 = time.time()
-
+		# print(f'xxxxx')
+		# print(end_date_string)
 		realtime_prices = get_realtime_price(end_date_string, codes)
 		# realtime_prices.to_csv("./realtime_prices.csv", index=False, encoding="gbk")
 
@@ -432,7 +434,7 @@ def get_name_list(end_date_string, period = 20, period_minute = 20, threshold = 
 		# print("kdj_selected_codes_hourly ",kdj_selected_codes_hourly)
 		# print("final_codes ", final_codes)
 		# print(final_results)
-
+		print(final_results)
 		return final_results
 	else:
 		print("错误日期信息")
@@ -444,7 +446,8 @@ def main():
 	today_date = date.today()
 	today_string = today_date.strftime('%Y-%m-%d')  # 格式为 YYYY-MM-DD
 	# print(today_string)
-	today_string = "2023-09-21" # To check 9-19
+	# To check：周一六日对应的日期会报错，在查期货实时价格数据库的时候，没有假日对应的信息，查现货价格时假日延后一天的信息
+	today_string = "2023-09-26" 
 	results = get_name_list(end_date_string = today_string, period = 20, threshold = 0.05)
 	return results
 if __name__ == "__main__":
