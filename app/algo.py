@@ -276,7 +276,7 @@ def check_upper_ma(prices, realtime_prices, period, if_minute = False):
 
 	return ma_selected_code
 
-def check_daily_kdj(daily_prices, codes, tor = 5):
+def check_daily_kdj(daily_prices, codes, tor = 1):
 	selected_code = []
 	for code in codes:
 		sub_df = daily_prices[daily_prices["future_code"] == code]
@@ -447,7 +447,7 @@ def main():
 	today_string = today_date.strftime('%Y-%m-%d')  # 格式为 YYYY-MM-DD
 	# print(today_string)
 	# To check：周一六日对应的日期会报错，在查期货实时价格数据库的时候，没有假日对应的信息，查现货价格时假日延后一天的信息
-	today_string = "2023-09-26" 
+	today_string = "2023-09-15" 
 	results = get_name_list(end_date_string = today_string, period = 20, threshold = 0.05)
 	return results
 if __name__ == "__main__":
